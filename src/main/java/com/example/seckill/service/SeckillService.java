@@ -21,7 +21,7 @@ public class SeckillService {
     public void kill(Integer productId){
         // 检查库存
         Product product = productMapper.selectById(productId);
-        if(product.getStock()<0){
+        if(product.getStock()<=0){
             throw new RuntimeException("商品库存已售完");
         }
 
