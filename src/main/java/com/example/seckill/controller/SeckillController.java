@@ -47,7 +47,7 @@ public class SeckillController {
 
             if(product.getStock()>0){
                 // 通过 zookeeper 回滚其他服务器的 JVM 缓存中的商品售完标记
-                String path = "/" + Constants.ZOOKEEPER_PRODUCT_STOCK_PREFIX + "/" + product.getId();
+                String path = "/" + Constants.ZK_PRODUCT_SOLD_OUT_FLAG + "/" + product.getId();
                 if (zooKeeper.exists(path, true) != null) {
                     zooKeeper.setData(path, "false".getBytes(), -1);
                 }
@@ -73,7 +73,7 @@ public class SeckillController {
             stringRedisTemplate.opsForValue().increment(Constants.REDIS_PRODUCT_STOCK_PREFIX + productId);
 
             // zookeeper 中设置售完标记， zookeeper 节点数据格式 product/1 true
-            String productPath = "/" + Constants.ZOOKEEPER_PRODUCT_STOCK_PREFIX + "/" + productId;
+            String productPath = "/" + Constants.ZK_PRODUCT_SOLD_OUT_FLAG + "/" + productId;
             if (zooKeeper.exists(productPath, true) == null) {
                 log.info("设置 zookeeper 售完");
                 zooKeeper.create(productPath, "true".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
@@ -97,7 +97,7 @@ public class SeckillController {
 
 
             // 通过 zookeeper 回滚其他服务器的 JVM 缓存中的商品售完标记
-            String path = "/" + Constants.ZOOKEEPER_PRODUCT_STOCK_PREFIX + "/" + productId;
+            String path = "/" + Constants.ZK_PRODUCT_SOLD_OUT_FLAG + "/" + productId;
             if (zooKeeper.exists(path, true) != null) {
                 log.info("设置 zookeeper 售完为否");
                 zooKeeper.setData(path, "false".getBytes(), -1);

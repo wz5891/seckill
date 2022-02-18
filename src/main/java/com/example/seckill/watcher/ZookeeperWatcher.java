@@ -20,7 +20,7 @@ public class ZookeeperWatcher implements Watcher {
 
             try {
                 // 创建 zookeeper 商品售罄信息根节点
-                String path = "/" + Constants.ZOOKEEPER_PRODUCT_STOCK_PREFIX;
+                String path = "/" + Constants.ZK_PRODUCT_SOLD_OUT_FLAG;
                 if (zooKeeper != null && zooKeeper.exists(path, false) == null) {
                     zooKeeper.create(path, "".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
                 }
